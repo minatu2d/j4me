@@ -1,0 +1,257 @@
+package org.j4me.examples.ui.themes;
+
+import MainProcess.ConnectionCenter;
+import javax.microedition.lcdui.Font;
+import javax.microedition.lcdui.Graphics;
+import org.j4me.examples.ui.Runner;
+import org.j4me.examples.ui.components.ContentView;
+import org.j4me.ui.*;
+import res.NewsSource;
+import res.ResManager;
+
+/**
+ * A red on white theme.
+ */
+public class sunnetTheme
+        extends Theme {
+
+    public long lastTimeForTitleBar = 0;
+    public final static long DELAY_TITLE_BAR = 300;
+    public int titleBarOffset = 0;
+    public int sourceNameLength = 0;
+
+    public sunnetTheme() {
+        super();
+    }
+
+    /**
+     * @see Theme#getBackgroundColor()
+     */
+    public int getBackgroundColor() {
+        return BROWN;
+    }
+
+    /**
+     * @see Theme#getFontColor()
+     */
+    public int getFontColor() {
+        return WHITE;
+    }
+
+    /**
+     * @see Theme#getBorderColor()
+     */
+    public int getBorderColor() {
+        return MAROON;
+    }
+
+    /**
+     * @see Theme#getHighlightColor()
+     */
+    public int getHighlightColor() {
+        return LIGHT_RED;
+    }
+
+    /**
+     * @see Theme#getMenuBarBackgroundColor()
+     */
+    public int getMenuBarBackgroundColor() {
+        return MAROON;
+    }
+
+    /**
+     * @see Theme#getMenuBarHighlightColor()
+     */
+    public int getMenuBarHighlightColor() {
+        return RED;
+    }
+
+    /**
+     * @see Theme#getMenuBarBorderColor()
+     */
+    public int getMenuBarBorderColor() {
+        return WHITE;
+    }
+
+    /**
+     * @see Theme#getMenuFontColor()
+     */
+    public int getMenuFontColor() {
+        return WHITE;
+    }
+
+    /**
+     * @see Theme#getMenuFontHighlightColor()
+     */
+    public int getMenuFontHighlightColor() {
+        return RED;
+    }
+
+    /**
+     * @see Theme#getTitleBarBackgroundColor()
+     */
+    public int getTitleBarBackgroundColor() {
+        return MAROON;
+    }
+
+    /**
+     * @see Theme#getTitleBarHighlightColor()
+     */
+    public int getTitleBarHighlightColor() {
+        return RED;
+    }
+
+    /**
+     * @see Theme#getTitleBarBorderColor()
+     */
+    public int getTitleBarBorderColor() {
+        return MAROON;
+    }
+
+    /**
+     * @see Theme#getTitleFontColor()
+     */
+    public int getTitleFontColor() {
+        return WHITE;
+    }
+
+    /**
+     * @see Theme#getScrollbarBackgroundColor()
+     */
+    public int getScrollbarBackgroundColor() {
+        return MAROON;
+    }
+
+    /**
+     * @see Theme#getScrollbarHighlightColor()
+     */
+    public int getScrollbarHighlightColor() {
+        return SILVER;
+    }
+
+    /**
+     * @see Theme#getScrollbarBorderColor()
+     */
+    public int getScrollbarBorderColor() {
+        return MAROON;
+    }
+
+    /**
+     * @see Theme#getScrollbarTrackbarColor()
+     */
+    public int getScrollbarTrackbarColor() {
+        return RED;
+    }
+
+    public void paintPageInfo(Graphics g) {
+    }
+
+    public void paintGridBackground(Graphics g) {
+        g.drawImage(ResManager.getGridBackGroundImage(), 0, 0, Graphics.LEFT | Graphics.TOP);
+    }
+
+    public void paintListAreaBackground(Graphics g, int vmargin) {
+        g.drawImage(ResManager.getListAreaBackGround(), vmargin, vmargin, Graphics.LEFT | Graphics.TOP);
+        //g.setColor(Theme.WHITE);
+
+        //g.fillRoundRect(0, 0, ResManager.res.list_area_width, ResManager.res.list_area_height, 45, 45);        
+//        g.drawImage(ResManager.getListAreaHeader(), vmargin - 3, vmargin - 7, Graphics.LEFT | Graphics.TOP);
+//        int i = 0;
+//        for (i = 0; i < 12; i++) {
+//            g.drawImage(ResManager.getListBgTile(), vmargin - 3, vmargin + 9 + i * 20, Graphics.LEFT | Graphics.TOP);
+//        }
+    }
+
+    public void paintContentViewBackground(Graphics g, int vmargin) {
+        g.drawImage(ResManager.getContentViewBackground(), vmargin, vmargin, Graphics.LEFT | Graphics.TOP);
+        //g.setColor(0x80000000 | Theme.WHITE);
+        //g.fillRoundRect(vmargin - 3, vmargin - 2, ResManager.getContentViewBackground().getWidth() + 6, ResManager.getContentViewBackground().getHeight() + 4, 20, 20);
+        g.drawImage(ResManager.getContentViewCornerLeftTopImage(), vmargin - 10, vmargin - 10, Graphics.LEFT | Graphics.TOP);
+        g.drawImage(ResManager.getContentViewHorizonalTopEdge(), vmargin, vmargin - 10, Graphics.LEFT | Graphics.TOP);
+        g.drawImage(ResManager.getContentViewCornerRightTopImage(), vmargin + ResManager.res.content_view_width, vmargin - 10, Graphics.LEFT | Graphics.TOP);
+        g.drawImage(ResManager.getContentViewVerticalLeftEdge(), vmargin - 10, vmargin, Graphics.LEFT | Graphics.TOP);
+        g.drawImage(ResManager.getContentViewVerticalRightEdge(), vmargin + ResManager.res.content_view_width, vmargin, Graphics.LEFT | Graphics.TOP);
+        g.drawImage(ResManager.getContentViewCornerLeftBottomImage(), vmargin - 10, vmargin + ResManager.res.content_view_height, Graphics.LEFT | Graphics.TOP);
+        g.drawImage(ResManager.getContentViewHorizonalBottomEdge(), vmargin, vmargin + ResManager.res.content_view_height, Graphics.LEFT | Graphics.TOP);
+        g.drawImage(ResManager.getContentViewCornerRightBottomImage(), vmargin + ResManager.res.content_view_width, vmargin + ResManager.res.content_view_height, Graphics.LEFT | Graphics.TOP);
+    }
+
+    public void paintBackground(Graphics g) {
+        //g.fillRect(0, 0, g.getClipWidth(), g.getClipHeight());
+        paintGridBackground(g);
+        if (UIManager.getScreen() instanceof ListMenu) {
+            paintContentViewBackground(g, ((ListMenu) UIManager.getScreen()).margin);
+        }
+        if (UIManager.getScreen() instanceof ContentView) {
+            paintContentViewBackground(g, ((ContentView) UIManager.getScreen()).margin);
+//            g.setColor(0x01000000 | Theme.WHITE);
+//            g.fillRoundRect(0, 0, ResManager.res.list_area_width, ResManager.res.list_area_height, 45, 45);
+        }
+    }
+
+    public void paintTitleBar(Graphics g, String title, int width, int height) {
+        // Fill the background of the title bar.
+        paintTitleBarBackground(g, 0, 0, width, height);
+        g.setColor(getTitleBarBorderColor());
+        g.drawLine(0, height - 1, width, height - 1);
+        g.setFont(getTitleFont());
+        g.setColor(getTitleFontColor());
+        if (UIManager.getOrderScreen() >= Runner.CATEGORY_LIST_MENU) {
+            sourceNameLength = 0;
+            if (ConnectionCenter.getSourceID() != -1) {
+                sourceNameLength = getFont().charWidth('A') * NewsSource.newsSource.name[ConnectionCenter.getSourceID()].length();
+                //g.drawImage(ResManager.getSmallIcon(), 0, 5, Graphics.LEFT | Graphics.TOP);
+                g.drawString(NewsSource.newsSource.name[ConnectionCenter.getSourceID()], 0, 10, Graphics.LEFT | Graphics.TOP);
+                g.fillRect(sourceNameLength + 3, 3, 3, height - 6);
+            }
+            // g.drawString(title, width / 2 + 70, height / 2 - 5, Graphics.HCENTER | Graphics.TOP);
+            // if ((getFont().charsWidth(temp, 0, temp.length)) > width - 3) {        
+            if (System.currentTimeMillis() > lastTimeForTitleBar + DELAY_TITLE_BAR) {
+                lastTimeForTitleBar = System.currentTimeMillis();
+                titleBarOffset++;
+                if (titleBarOffset >= title.length()) {
+                    titleBarOffset = 0;
+                }
+            }
+            // g.drawString(title.substring(titleBarOffset++), 0, 1, Graphics.LEFT | Graphics.TOP);            
+            if (title.length() > titleBarOffset) {
+                g.drawSubstring(title, titleBarOffset, title.length() - titleBarOffset, sourceNameLength + 6, height / 2 - 5, Graphics.LEFT | Graphics.TOP);
+            }
+        } else // Draw a Cline below the title bar to separate it from the canvas.
+        // Write the title text.            
+        {
+            g.drawString(title, width / 2, height / 2 - 5, Graphics.HCENTER | Graphics.TOP);
+        }
+    }
+
+    public int getContentFontColor() {
+        return BLACK;
+    }
+
+    public int getFontTextColor() {
+        return BLUE;
+    }
+
+    public Font getFont() {
+        return titleFont;
+    }
+
+    public int getTitleHeight() {
+        return 30;
+    }
+
+    public void paintPageInfo(Graphics g, int currentPage, int max_page) {
+        //g.fillRect(0, g.getClipHeight() - this.getPageInfoHeight(), g.getClipWidth(), this.getPageInfoHeight());
+        if (currentPage == 0) {
+            g.drawImage(ResManager.getUnavailPrevPage(), g.getClipWidth() / 2 - 6, g.getClipHeight() - this.getPageInfoHeight() / 2 - 5, Graphics.TOP | Graphics.LEFT);
+        } else {
+            g.drawImage(ResManager.getAvailPrevPage(), g.getClipWidth() / 2 - 6, g.getClipHeight() - this.getPageInfoHeight() / 2 - 5, Graphics.TOP | Graphics.LEFT);
+        }
+
+        if (currentPage == max_page) {
+            g.drawImage(ResManager.getUnavailNextPage(), g.getClipWidth() / 2 + 6, g.getClipHeight() - this.getPageInfoHeight() / 2 - 5, Graphics.TOP | Graphics.LEFT);
+        } else {
+            g.drawImage(ResManager.getAvailNextPage(), g.getClipWidth() / 2 + 6, g.getClipHeight() - this.getPageInfoHeight() / 2 - 5, Graphics.TOP | Graphics.LEFT);
+        }
+    }
+}

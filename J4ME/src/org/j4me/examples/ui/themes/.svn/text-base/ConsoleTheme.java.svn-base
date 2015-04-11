@@ -1,0 +1,187 @@
+package org.j4me.examples.ui.themes;
+
+import MainProcess.ConnectionCenter;
+import javax.microedition.lcdui.Font;
+import javax.microedition.lcdui.Graphics;
+import org.j4me.examples.ui.Runner;
+import org.j4me.ui.*;
+import res.NewsSource;
+import res.ResManager;
+
+/**
+ * Mimics old computer consoles with green text on black backgrounds.
+ */
+public class ConsoleTheme
+        extends Theme {
+
+    public long lastTimeForTitleBar = 0;
+    public final static long DELAY_TITLE_BAR = 300;
+    public int titleBarOffset = 0;
+    public int sourceNameLength = 0;
+
+    /**
+     * @see Theme#getBackgroundColor()
+     */
+    public int getBackgroundColor() {
+        return BLACK;
+    }
+
+    /**
+     * @see Theme#getFontColor()
+     */
+    public int getFontColor() {
+        return GREEN;
+    }
+
+    /**
+     * @see Theme#getBorderColor()
+     */
+    public int getBorderColor() {
+        return GREEN;
+    }
+
+    /**
+     * @see Theme#getHighlightColor()
+     */
+    public int getHighlightColor() {
+        return GREEN;
+    }
+
+    /**
+     * @see Theme#getMenuBarBackgroundColor()
+     */
+    public int getMenuBarBackgroundColor() {
+        return BLACK;
+    }
+
+    /**
+     * @see Theme#getMenuBarHighlightColor()
+     */
+    public int getMenuBarHighlightColor() {
+        return BLACK;
+    }
+
+    /**
+     * @see Theme#getMenuBarBorderColor()
+     */
+    public int getMenuBarBorderColor() {
+        return GREEN;
+    }
+
+    /**
+     * @see Theme#getMenuFontColor()
+     */
+    public int getMenuFontColor() {
+        return GREEN;
+    }
+
+    /**
+     * @see Theme#getMenuFontHighlightColor()
+     */
+    public int getMenuFontHighlightColor() {
+        return BLACK;
+    }
+
+    /**
+     * @see Theme#getTitleBarBackgroundColor()
+     */
+    public int getTitleBarBackgroundColor() {
+        return BLACK;
+    }
+
+    /**
+     * @see Theme#getTitleBarHighlightColor()
+     */
+    public int getTitleBarHighlightColor() {
+        return BLACK;
+    }
+
+    /**
+     * @see Theme#getTitleBarBorderColor()
+     */
+    public int getTitleBarBorderColor() {
+        return GREEN;
+    }
+
+    /**
+     * @see Theme#getTitleFontColor()
+     */
+    public int getTitleFontColor() {
+        return GREEN;
+    }
+
+    /**
+     * @see Theme#getScrollbarBackgroundColor()
+     */
+    public int getScrollbarBackgroundColor() {
+        return BLACK;
+    }
+
+    /**
+     * @see Theme#getScrollbarHighlightColor()
+     */
+    public int getScrollbarHighlightColor() {
+        return BLACK;
+    }
+
+    /**
+     * @see Theme#getScrollbarBorderColor()
+     */
+    public int getScrollbarBorderColor() {
+        return GREEN;
+    }
+
+    /**
+     * @see Theme#getScrollbarTrackbarColor()
+     */
+    public int getScrollbarTrackbarColor() {
+        return GREEN;
+    }
+
+    public int getFontTextColor() {
+        return GREEN;
+    }
+
+    public int getTitleHeight() {
+        return 30;
+    }
+
+    public int getContentFontColor() {
+        return GREEN;
+    }
+
+    public void paintTitleBar(Graphics g, String title, int width, int height) {
+        // Fill the background of the title bar.
+        paintTitleBarBackground(g, 0, 0, width, height);
+        g.setColor(getTitleBarBorderColor());
+        g.drawLine(0, height - 1, width, height - 1);
+        g.setFont(getTitleFont());
+        g.setColor(getTitleFontColor());
+        if (UIManager.getOrderScreen() >= Runner.CATEGORY_LIST_MENU) {
+            sourceNameLength = 0;
+            if (ConnectionCenter.getSourceID() != -1) {
+                sourceNameLength = getFont().charWidth('A') * NewsSource.newsSource.name[ConnectionCenter.getSourceID()].length();
+                //g.drawImage(ResManager.getSmallIcon(), 0, 5, Graphics.LEFT | Graphics.TOP);
+                g.drawString(NewsSource.newsSource.name[ConnectionCenter.getSourceID()], 0, 10, Graphics.LEFT | Graphics.TOP);
+                g.fillRect(sourceNameLength + 3, 3, 3, height - 6);
+            }
+            if (System.currentTimeMillis() > lastTimeForTitleBar + DELAY_TITLE_BAR) {
+                lastTimeForTitleBar = System.currentTimeMillis();
+                titleBarOffset++;
+                if (titleBarOffset >= title.length()) {
+                    titleBarOffset = 0;
+                }
+            }
+            // g.drawString(title.substring(titleBarOffset++), 0, 1, Graphics.LEFT | Graphics.TOP);            
+            if (title.length() > titleBarOffset) {
+                g.drawSubstring(title, titleBarOffset, title.length() - titleBarOffset, sourceNameLength + 6, height / 2 - 5, Graphics.LEFT | Graphics.TOP);
+            }
+        } else {
+            g.drawString(title, width / 2, height / 2 - 5, Graphics.HCENTER | Graphics.TOP);
+        }
+    }
+
+    public Font getFont() {
+        return titleFont;
+    }
+}

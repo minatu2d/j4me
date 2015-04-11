@@ -1,0 +1,89 @@
+package org.j4me.examples.ui.components;
+
+import MainProcess.IReceiver;
+import javax.microedition.lcdui.*;
+import org.j4me.ui.*;
+import org.j4me.ui.components.*;
+
+/**
+ * Shows a <code>Label</code> component in action.  The label displays
+ * multiple paragraphs, line breaks, and text justification.
+ */
+public class ImageView
+        extends Dialog implements IReceiver {
+
+    /**
+     * The previous screen.
+     */
+    public DeviceScreen previous;
+    /**
+     * The label demonstrated by this example.
+     */
+    public static final int DELAY_PAINT = 1000;
+//    public Picture pic = new Picture();
+    public int imageHeight = 100;
+
+    /**
+     * Constructs a screen that shows a <code>Label</code> component in action.
+     * 
+     * @param previous is the screen to return to once this done.
+     */
+    public ImageView(DeviceScreen previous) {
+        super(2);
+        this.previous = previous;
+        this.setMargin(5);
+        //ResManager.res.setContentViewSize(this.getWidth() - UIManager.theme.getVerticalScrollbarWidth(), this.getHeight() - 2 * margin);
+
+        // Set the title and menu for this screen.
+        setTitle("Conten view");
+        setMenuText("Back", "Image");
+        imageHeight = 100;
+
+        // Center the text.
+
+        // Make the label be mutliple paragraphs.
+        //label.setLabel("Nhiều năm tiếp cận với marketing online và làm việc với nhiều CEO, thuyết phục họ chọn marketing online, tôi đã gặp rất nhiều trở ngại, và những câu hỏi vô cùng hóc búa kiểu như:\nNhiều năm tiếp cận với marketing online và làm việc với nhiều CEO, thuyết phục họ chọn marketing online, tôi đã gặp rất nhiều trở ngại, và những câu hỏi vô cùng hóc búa kiểu như:\nNhiều năm tiếp cận với marketing online và làm việc với nhiều CEO, thuyết phục họ chọn marketing online, tôi đã gặp rất nhiều trở ngại, và những câu hỏi vô cùng hóc búa kiểu như:Nhiều năm tiếp cận với marketing online và làm việc vớ");
+//        pic.setHorizontalAlignment(Graphics.HCENTER);
+//        pic.setImage(ResManager.get24hIcon());
+
+        // Add the label to this screen.
+//        append(pic);
+    }
+
+    public void declineNotify() {
+       // System.out.println("List view :" + UIManager.getOrderScreen());
+        UIManager.decOrderScreen();
+        previous.show();
+    }
+
+    public void acceptNotify() {
+        //src="http://24hn02.24hstatic.com:8008/upload/3-2011/images/2011-08-08/1312806196-chan-rac-1.jpg"
+       // System.out.println("Accept");
+    }
+
+    public void processMessage(byte[] data) {
+        Image image = Image.createImage(data, 0, data.length);
+        Picture newPic = new Picture();
+        newPic.setHorizontalAlignment(Graphics.HCENTER);
+        newPic.setImage(image);
+       // System.out.println("Pic width :" + newPic.getImage().getWidth());
+       // System.out.println("Pic height :" + newPic.getImage().getHeight());
+        this.append(newPic);
+    }
+
+    public void setImageHeight(int requestHeight) {
+        this.imageHeight = requestHeight;
+    }
+
+    public void processMessage(String data) {
+        //System.out.println("Data : " + data);
+    }
+
+    public int getImageHeight() {
+        return imageHeight;
+    }
+
+    public int getImageWidth() {
+        return getWidth();
+    }
+}

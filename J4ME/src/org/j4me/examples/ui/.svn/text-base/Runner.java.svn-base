@@ -1,0 +1,311 @@
+package org.j4me.examples.ui;
+
+import MainProcess.ConnectionCenter;
+import MainProcess.MessageType;
+import MainProcess.RMS;
+import MainProcess.SMS;
+import javax.microedition.midlet.*;
+import org.j4me.examples.ui.components.ContentView;
+import org.j4me.ui.GridMenu;
+import org.j4me.ui.ListMenu;
+import org.j4me.ui.Preference;
+import org.j4me.ui.Theme;
+import org.j4me.ui.UIManager;
+import org.j4me.ui.components.GridElement;
+import res.Adver;
+import res.NewsSource;
+import res.ResManager;
+
+/**
+ * The demonstration MIDlet for the J4ME UI.
+ */
+public class Runner
+        extends MIDlet {
+
+    public final static String arrProperty[] = new String[]{"com.siemens.IMEI", "com.samsung.imei", "com.sonyericsson.imei", "com.motorola.IMEI", "com.nokia.mid.imei", "com.nokia.imei", "phone.imei", "IMEI", "com.lge.imei"};
+    public final static int NEWS_SOURCE_GRID_MENU = 0;
+    public final static int CATEGORY_LIST_MENU = 1;
+    public final static int ARTICLE_LIST_MENU = 2;
+    public final static int CONTENT_VIEW = 3;
+    public final static int IMAGE_VIEW = 4;
+    public final static int GENERAL_PREFERENCE_VIEW = -10;
+    public final static int DETALI_PREFERNCE_VIEW = -9;
+    public int screen_order = WELCOME;
+    public static int WELCOME = -1;
+    public final static int WELCOME_TIMEOUT = 2000;
+    public static String imei = null;
+    public final static byte FIRST_NOT_ACTIVATED = 0;
+    public final static byte NOT_ACTIVATED = 1;
+    public final static byte FIRST_TIME_ACTIVATED = 2;
+    public final static byte ACTIVATED = 3;
+    /* (non-Javadoc)
+     * @see javax.microedition.midlet.MIDlet#startApp()
+     */
+
+    public Runner() {
+        imei = Runner.getImei();
+        System.out.println("Imei : " + imei);
+        //SMS.sendKichHoat(imei);
+    }
+
+    protected void startApp() throws MIDletStateChangeException {
+        /* Initialize the J4ME UI manager.*/
+        RMS.init();
+        SMS.init();
+        Adver.init();
+        if (Runner.getApp_id().compareTo("000") == 0) {
+            //SMS.sendKichHoat(imei);
+        }
+        UIManager.init(this);
+        UIManager.setTheme(Theme.getDefaltTheme());
+        ResManager.init();
+        NewsSource.init();
+
+
+        GridMenu newsSourceMenu = new GridMenu("NEWS", null);
+        UIManager.setNewsSourceMenu(newsSourceMenu);
+        Preference preference = new Preference(newsSourceMenu);
+        newsSourceMenu.previous = preference;
+        // Create a submenu for showing component example screens.
+
+        ListMenu categoryList = new ListMenu("Chủ đề", newsSourceMenu);
+        categoryList.headerIcon = ResManager.getCategoryIcon();
+        UIManager.setCategoryList(categoryList);
+
+        ListMenu articleList = new ListMenu("Article list", categoryList);
+        UIManager.setArticleList(articleList);
+
+        ContentView contentView = new ContentView(articleList);
+        UIManager.setContentView(contentView);
+
+//        Display.getDisplay(this).
+//
+//        DeviceScreen waitingScreen = new DeviceScreen() {
+//
+//            public long timeout = 500;
+//            public long lastTime = System.currentTimeMillis();
+//            public boolean isStop = false;
+//
+//            public DeviceScreen()
+//            {
+//                this.slave.
+//            }
+//            public void paint(Graphics g) {
+//                g.drawImage(ResManager.getWelcome(), 0, 0, Graphics.LEFT | Graphics.TOP);
+//            }
+//
+//            public void run() {
+//                while (!isStop) {
+//                    if (System.currentTimeMillis() > lastTime + timeout) {
+//                        break;
+//                    }
+//                    try {
+//                        Thread.sleep(100);
+//                    } catch (InterruptedException ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//                UIManager.getNewsSourceMenu().show();
+//            }
+//        };
+
+//        ListMenu category1 = new ListMenu("Công nghệ", categoryList);
+//        categoryList.appendMenuOption("1. Công nghệ", category1);      
+//        ListMenu category2 = new ListMenu("2. Kinh doanh", categoryList);
+//        categoryList.appendMenuOption("Kinh doanh", category2);
+//        ListMenu category3 = new ListMenu("3. Xã hội", categoryList);
+//        categoryList.appendMenuOption("Kinh doanh", category3);
+//        ListMenu category4 = new ListMenu("4. Thể thao", categoryList);
+//        categoryList.appendMenuOption("Thể thao", category4);
+//        ListMenu category5 = new ListMenu("5. Giải tri", categoryList);
+//        categoryList.appendMenuOption("Giải tri", category5);
+//        ListMenu category6 = new ListMenu("6. Văn hóa", categoryList);
+//        categoryList.appendMenuOption("Văn hóa", category6);
+//        ListMenu category7 = new ListMenu("7. Tệ nạn", categoryList);
+//        categoryList.appendMenuOption("Tệ nạn", category7);
+//        ListMenu category8 = new ListMenu("8. Thế giới", categoryList);
+//        categoryList.appendMenuOption("Thế giới", category8);
+////
+//        ContentView article1 = new ContentView(category1);
+//        category1.appendMenuOption("title1", article1);
+//        ContentView article2 = new ContentView(category1);
+//        category1.appendMenuOption("title2", article2);
+//        ContentView article3 = new ContentView(category1);
+//        category1.appendMenuOption("title3", article3);
+//        ContentView article4 = new ContentView(category1);
+//        category1.appendMenuOption("title4", article4);
+
+//
+//        GridElement item1 = new GridElement(categoryList);
+//        item1.setImage(NewsSource.getICon(0));        
+//        item1.setName("24h.com.vn");
+//        newsSourceMenu.append(item1);
+//
+//        GridElement item2 = new GridElement(categoryList);
+//        item2.setImage(ResManager.getNgoisaoIcon());
+//        item2.setName("ngoisao.net");
+//        newsSourceMenu.append(item2);
+//
+//        GridElement item3 = new GridElement(categoryList);
+//        item3.setImage(ResManager.getVietnamnetIcon());
+//        item3.setName("vietnamnet.vn");
+//        newsSourceMenu.append(item3);
+//
+//        GridElement item4 = new GridElement(categoryList);
+//        item4.setImage(ResManager.getZingIcon());
+//        item4.setName("news.zing.vn");
+//        newsSourceMenu.append(item4);
+//
+//        GridElement item5 = new GridElement(categoryList);
+//        item5.setImage(ResManager.getKenh14Icon());
+//        item5.setName("kenh14.vn");
+//        newsSourceMenu.append(item5);
+//
+//        GridElement item6 = new GridElement(categoryList);
+//        item6.setImage(ResManager.getDantriIcon());
+//        item6.setName("dantri.com.vn");
+//        newsSourceMenu.append(item6);
+//
+//        GridElement item7 = new GridElement(categoryList);
+//        item7.setImage(ResManager.getWebtrethoIcon());
+//        item7.setName("webtretho.vn");
+//        newsSourceMenu.append(item7);
+//
+//        GridElement item8 = new GridElement(categoryList);
+//        item8.setImage(ResManager.getLaodongIcon());
+//        item8.setName("laodong.com.vn");
+//        newsSourceMenu.append(item8);
+//
+//        GridElement item9 = new GridElement(categoryList);
+//        item9.setImage(ResManager.getSucsongmoiIcon());
+//        item9.setName("sucsongmoi.com.vn");
+//        newsSourceMenu.append(item9);
+//
+//        GridElement item10 = new GridElement(categoryList);
+//        item10.setImage(ResManager.getKenh14Icon());
+//        item10.setName("kenh24.vn");
+//        newsSourceMenu.append(item10);
+//
+//        GridElement item11 = new GridElement(categoryList);
+//        item11.setImage(ResManager.getKenh14Icon());
+//        item11.setName("kenh24.vn");
+//        newsSourceMenu.append(item11);
+//
+//        GridElement item12 = new GridElement(categoryList);
+//        item12.setImage(ResManager.getKenh14Icon());
+//        item12.setName("kenh24.vn");
+//        newsSourceMenu.append(item12);
+//
+//        GridElement item13 = new GridElement(categoryList);
+//        item13.setImage(ResManager.getKenh14Icon());
+//        item13.setName("kenh24.vn");
+//        newsSourceMenu.append(item13);
+//
+//        GridElement item14 = new GridElement(categoryList);
+//        item14.setImage(ResManager.getKenh14Icon());
+//        item14.setName("kenh24.vn");
+//        newsSourceMenu.append(item14);
+////        NewsSource.init();
+        int i = 0;
+        for (i = 0; i < NewsSource.newsSource.currentNSource; i++) {
+            GridElement item = new GridElement(categoryList, i);
+            item.setImage(NewsSource.getICon(i));
+            item.setName(NewsSource.getAddress(i));
+            newsSourceMenu.append(item);
+        }
+
+        newsSourceMenu.show();
+//        UIManager.display.setCurrent(waitingScreen);
+        /*Init for connection center*/
+        ConnectionCenter.init();
+        if (Runner.getApp_id().compareTo("000") == 0) {
+            ConnectionCenter.setReceiver(RMS.rms);
+            ConnectionCenter.conCenter.send(MessageType.RQ_APPID + ";");
+        }
+        // ConnectionCenter.sendMessage(MessageType.RQ_CATEGORY);
+        UIManager.mainRun();
+    }
+
+    /* (non-Javadoc)
+     * @see javax.microedition.midlet.MIDlet#pauseApp()
+     */
+    protected void pauseApp() {
+        // The application has no state so ignore pauses.
+    }
+
+    /* (non-Javadoc)
+     * @see javax.microedition.midlet.MIDlet#destroyApp(boolean)
+     */
+    protected void destroyApp(boolean cleanup) throws MIDletStateChangeException {
+        // The application holds no resources that need cleanup.
+    }
+
+    public static String getImei() {
+        String sim = null;
+        try {
+            System.getProperty("microedition.platform");
+            for (int i = 0; i < arrProperty.length; ++i) {
+                if (sim == null) {
+                    sim = System.getProperty(arrProperty[i]);
+                } else {
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            sim = "000000000000000";
+        }
+        return sim;
+    }
+
+    public static String getApp_id() {
+        return RMS.getapp_id();
+    }
+
+    public static int getRemainOpen() {
+        return RMS.getRemain();
+    }
+
+    public static void setApp_id(String app_id) {
+        RMS.setApp_id(app_id);
+    }
+
+    public static void setRemainOpen(int remainOpen) {
+        RMS.setRemain(remainOpen);
+    }
+
+    public static byte getActivation() {
+        return RMS.getActivation();
+    }
+
+    public static void setActivation(byte state) {
+        RMS.setActivation(state);
+    }
+}
+//
+///**
+// * Options available from a menu that change the application's theme.
+// */
+//class ThemeMenuItem
+//        implements MenuItem {
+//
+//    public final String name;
+//    public final Theme theme;
+//
+//    public ThemeMenuItem(String name, Theme theme) {
+//        this.name = name;
+//        this.theme = theme;
+//    }
+//
+//    public String getText() {
+//        // The name as it appears in the menu.
+//        return name;
+//    }
+//
+//    public void onSelection() {
+//        // Applies a theme to the example midlet.
+//        UIManager.setTheme(theme);
+//
+//        // Repaint the screen so the changes take effect.
+//        UIManager.getScreen().repaint();
+//    }    
+//}
